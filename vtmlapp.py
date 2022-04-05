@@ -5,16 +5,12 @@ import numpy as np
 
 @st.cache
 def import_data_andmodel():
-    bdb = pd.read_excel('best_subdf.xlsx', index_col=0)
+    
     nn_model = load('best_model.joblib')
+    columns = ['HTN', 'COPD', 'CRT', 'MI_base_x', 'MI34_base', 'LV_aneurysm_x', 'Furosemid', 'ARB', 'ICD_shock', 'Incessant_VT', 'Halmozott_ICD_therapy', 'Indukalhatosag',
+, 'Indukalhato_morfologiak_szama', 'LAVA_abl']
 
-    Xs = bdb.drop('recurrence_1y', axis=1).values
-    ys = bdb.recurrence_1y.values
-
-    n =200
-    testX = Xs[n, :]
-    prediction = nn_model.predict_proba([testX])
-    return bdb, nn_model, Xs, ys
+    return nn_model, columns
 
 
 # print(prediction, ys[n])
@@ -24,8 +20,8 @@ def show_predict():
     st.title('VT 1 year recurrence prediction')
     st.write('''### first please input the patient data below: ''')
 
-    bdb, nn_model, Xs, ys = import_data_andmodel()
-    bdb_data_columns = bdb.drop('recurrence_1y', axis=1).columns
+    nn_model, columns = import_data_andmodel()
+    bdb_data_columns = columns
 
     patient_data = {}
     for colname in bdb_data_columns:
